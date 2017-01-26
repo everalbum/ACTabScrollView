@@ -406,7 +406,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     if let tab = self.cachedPageTabs[i] {
                         if (animated) {
-                            UIView.animateWithDuration(0.5, delay: 0, options: UIViewAnimationOptions.AllowUserInteraction, animations: {
+                            UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.AllowUserInteraction, animations: {
                                 tab.alpha = alpha
                                 return
                             }, completion: nil)
