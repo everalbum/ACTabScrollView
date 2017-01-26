@@ -557,7 +557,7 @@ class ArrowView : UIView {
     override func drawRect(rect: CGRect) {
         self.rect = rect
         
-        let ctx = UIGraphicsGetCurrentContext()
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         
         CGContextBeginPath(ctx)
         CGContextMoveToPoint(ctx, 0, 0)
@@ -568,7 +568,7 @@ class ArrowView : UIView {
         CGContextAddQuadCurveToPoint(ctx, maxX * 0.88, 0, maxX, 0)
         CGContextClosePath(ctx)
         
-        CGContextSetFillColorWithColor(ctx, arrorBackgroundColor?.CGColor)
+        CGContextSetFillColorWithColor(ctx, arrorBackgroundColor?.CGColor ?? UIColor.whiteColor().CGColor)
         CGContextFillPath(ctx);
     }
     
