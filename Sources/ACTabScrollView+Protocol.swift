@@ -10,6 +10,12 @@ import UIKit
 
 public protocol ACTabScrollViewDelegate {
     
+    // triggered by starting scrolling
+    func tabScrollViewDidStartScrolling(tabScrollView: ACTabScrollView)
+    
+    // triggered by starting scrolling
+    func tabScrollViewEndStartScrolling(tabScrollView: ACTabScrollView)
+    
     // triggered by stopping at particular page
     func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int)
     

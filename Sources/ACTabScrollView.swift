@@ -199,6 +199,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation begin by dragging
     public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        // tell the delegate we started scrolling
+        delegate?.tabScrollViewDidStartScrolling(self)
+        
         // stop current scrolling before start another scrolling
         stopScrolling()
         // set the activedScrollView
@@ -207,12 +210,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop with decelerating
     public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        delegate?.tabScrollViewEndStartScrolling(self)
         moveToIndex(currentPageIndex(), animated: true)
     }
     
     // scrolling animation stop without decelerating
     public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
+            delegate?.tabScrollViewEndStartScrolling(self)
             moveToIndex(currentPageIndex(), animated: true)
         }
     }
