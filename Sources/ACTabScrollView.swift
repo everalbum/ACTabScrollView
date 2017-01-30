@@ -34,6 +34,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     public var delegate: ACTabScrollViewDelegate?
     public var dataSource: ACTabScrollViewDataSource?
+    public var scrollingDisabled: Bool = false {
+        didSet {
+            tabSectionScrollView.scrollEnabled = !scrollingDisabled
+            contentSectionScrollView.scrollEnabled = !scrollingDisabled
+        }
+    }
     
     // MARK: Private Variables
     private var tabSectionScrollView: UIScrollView!
@@ -185,11 +191,15 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: - Tab Clicking Control
     func tabViewDidClick(sensor: UITapGestureRecognizer) {
+        guard scrollingDisabled == false else { return }
+        
         activedScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
     func tabSectionScrollViewDidClick(sensor: UITapGestureRecognizer) {
+        guard scrollingDisabled == false else { return }
+        
         activedScrollView = tabSectionScrollView
         moveToIndex(pageIndex, animated: true)
     }
