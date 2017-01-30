@@ -62,6 +62,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     // MARK: DataSource
     private var numberOfPages = 0
     
+    @available(iOS 10.0, *)
+    lazy var feedbackGenerator: UISelectionFeedbackGenerator = { return UISelectionFeedbackGenerator() }()
+    
     private func widthForTabAtIndex(index: Int) -> CGFloat {
         return cachedPageTabs[index]?.frame.width ?? 0
     }
@@ -206,6 +209,10 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         stopScrolling()
         // set the activedScrollView
         activedScrollView = scrollView
+        
+        if #available(iOS 10.0, *) {
+            feedbackGenerator.prepare()
+        }
     }
     
     // scrolling animation stop with decelerating
@@ -252,7 +259,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             if (scrollView == contentSectionScrollView) {
                 tabSectionScrollView.contentOffset.x = ((contentSectionScrollView.contentOffset.x + halfWidth - contentsWidth) / speed) + tabsWidth - halfWidth
             }
-            updateTabAppearance()
         }
         
         if (isStarted && pageIndex != currentIndex) {
@@ -264,6 +270,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             
             // callback
             delegate?.tabScrollView(self, didScrollPageTo: currentIndex)
+            
+            if #available(iOS 10.0, *) {
+                feedbackGenerator.selectionChanged()
+            }
+
+            updateTabAppearance()
         }
     }
     
