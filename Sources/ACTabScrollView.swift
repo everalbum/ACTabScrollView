@@ -93,8 +93,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionScrollView = UIScrollView()
         arrowView = ArrowView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
         
-        self.addSubview(tabSectionScrollView)
         self.addSubview(contentSectionScrollView)
+        self.addSubview(tabSectionScrollView)
         self.addSubview(arrowView)
         
         tabSectionScrollView.pagingEnabled = false
@@ -327,6 +327,18 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         return currentPageIndex
     }
 
+    public var maxTabViewHeight: CGFloat {
+        var max: CGFloat = 0
+        for i in 0 ..< numberOfPages {
+            if let tabView = tabViewForPageAtIndex(i) {
+                if (tabView.frame.height > max) {
+                    max = tabView.frame.height
+                }
+            }
+        }
+        return max
+    }
+    
     private func setupPages() {
         // reset number of pages
         numberOfPages = dataSource?.numberOfPagesInTabScrollView(self) ?? 0
@@ -343,18 +355,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         
         if (numberOfPages != 0) {
             // cache tabs and get the max height
-            var maxTabHeight: CGFloat = 0
             for i in 0 ..< numberOfPages {
                 if let tabView = tabViewForPageAtIndex(i) {
-                    // get max tab height
-                    if (tabView.frame.height > maxTabHeight) {
-                        maxTabHeight = tabView.frame.height
-                    }
                     cachedPageTabs[i] = tabView
                 }
             }
             
-            let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : maxTabHeight
+            let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : maxTabViewHeight
             let contentSectionHeight = self.frame.size.height - tabSectionHeight
             
             // setup tabs first, and set contents later (lazyLoadPages)
@@ -387,7 +394,11 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
             
             // reset the fixed size of content section
-            contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
+            var contentScrollViewFrame: CGRect = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
+            if delegate?.tabScrollViewContentViewFrameFillsViewBounds() == true {
+                contentScrollViewFrame = CGRect(origin: .zero, size: self.frame.size)
+            }
+            contentSectionScrollView.frame = contentScrollViewFrame
             
             // reset the origin of arrow view
             arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
