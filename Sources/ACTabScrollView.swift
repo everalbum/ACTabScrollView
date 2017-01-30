@@ -371,7 +371,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     tabView.frame = CGRect(
                         origin: CGPoint(
                             x: tabSectionScrollViewContentWidth,
-                            y: tabSectionHeight - tabView.frame.height),
+                            y: 0),
                         size: tabView.frame.size)
                     
                     // bind event
