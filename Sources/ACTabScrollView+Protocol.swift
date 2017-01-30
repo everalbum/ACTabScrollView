@@ -10,6 +10,9 @@ import UIKit
 
 public protocol ACTabScrollViewDelegate {
     
+    // determine the frame of the contentScrollView
+    func tabScrollViewContentViewFrameFillsViewBounds() -> Bool
+    
     // triggered by starting scrolling
     func tabScrollViewDidStartScrolling(tabScrollView: ACTabScrollView)
     
