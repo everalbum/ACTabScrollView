@@ -42,7 +42,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // MARK: Private Variables
-    private var tabSectionScrollView: UIScrollView!
+    public var tabSectionScrollView: UIScrollView!
     private var contentSectionScrollView: UIScrollView!
     private var arrowView: ArrowView!
     
