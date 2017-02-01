@@ -13,6 +13,9 @@ public protocol ACTabScrollViewDelegate {
     // determine the frame of the contentScrollView
     func tabScrollViewContentViewFrameFillsViewBounds() -> Bool
     
+    // determine the insets for the frame of the tabSectionScrollView
+    func tabSectionScrollViewFrameInset() -> UIEdgeInsets
+    
     // triggered by starting scrolling
     func tabScrollViewDidStartScrolling(tabScrollView: ACTabScrollView)
     

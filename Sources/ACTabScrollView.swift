@@ -406,7 +406,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             }
             
             // reset the fixed size of tab section
-            tabSectionScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabSectionHeight)
+            let tabSectionFrameInsets = delegate?.tabSectionScrollViewFrameInset() ?? UIEdgeInsetsZero
+            tabSectionScrollView.frame = CGRect(x: tabSectionFrameInsets.left,
+                                                y: 0,
+                                                width: self.frame.size.width - tabSectionFrameInsets.left - tabSectionFrameInsets.right,
+                                                height: tabSectionHeight)
+            
             tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
             tabSectionScrollView.contentInset = UIEdgeInsets(
                 top: 0,
