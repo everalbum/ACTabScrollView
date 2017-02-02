@@ -253,7 +253,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         
         if (scrollView == activedScrollView) {
             let speed = self.frame.width / widthForTabAtIndex(currentIndex)
-            let halfWidth = self.frame.width / 2
             
             var tabsWidth: CGFloat = 0
             var contentsWidth: CGFloat = 0
@@ -263,12 +262,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             }
             
             if (scrollView == tabSectionScrollView) {
-                contentSectionScrollView.contentOffset.x = ((tabSectionScrollView.contentOffset.x + halfWidth - tabsWidth) * speed) + contentsWidth - halfWidth
+                contentSectionScrollView.contentOffset.x = ((tabSectionScrollView.contentOffset.x - tabsWidth) * speed) + contentsWidth
             }
             
             if (scrollView == contentSectionScrollView) {
-                tabSectionScrollView.contentOffset.x = ((contentSectionScrollView.contentOffset.x + halfWidth - contentsWidth) / speed) + tabsWidth - halfWidth
+                tabSectionScrollView.contentOffset.x = ((contentSectionScrollView.contentOffset.x - contentsWidth) / speed) + tabsWidth
             }
+            updateTabAppearance()
         }
         
         if (isStarted && pageIndex != currentIndex) {
@@ -285,7 +285,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 feedbackGenerator.selectionChanged()
             }
 
-            updateTabAppearance()
         }
     }
     
@@ -332,7 +331,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 contentOffsetX += self.frame.width
             }
             // set default position of tabs and contents
-            tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX - (self.frame.width - widthForTabAtIndex(index)) / 2, y: tabSectionScrollView.contentOffset.y)
+            tabSectionScrollView.contentOffset = CGPoint(x: 0, y: tabSectionScrollView.contentOffset.y)
             contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentSectionScrollView.contentOffset.y)
             updateTabAppearance(animated: false)
         }
@@ -404,7 +403,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 }
                 tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
             }
-            
             // reset the fixed size of tab section
             let tabSectionFrameInsets = delegate?.tabSectionScrollViewFrameInset() ?? UIEdgeInsetsZero
             tabSectionScrollView.frame = CGRect(x: tabSectionFrameInsets.left,
@@ -413,11 +411,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                                                 height: tabSectionHeight)
             
             tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
-            tabSectionScrollView.contentInset = UIEdgeInsets(
-                top: 0,
-                left: (self.frame.width / 2) - (widthForTabAtIndex(0) / 2),
-                bottom: 0,
-                right: (self.frame.width / 2) - (widthForTabAtIndex(numberOfPages - 1) / 2))
+            tabSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: self.frame.width - widthForTabAtIndex(numberOfPages - 1))
             tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
             
             // reset the fixed size of content section
