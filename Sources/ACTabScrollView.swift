@@ -43,7 +43,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: Private Variables
     public var tabSectionScrollView: UIScrollView!
-    private var contentSectionScrollView: UIScrollView!
+    public var contentSectionScrollView: UIScrollView!
     private var arrowView: ArrowView!
     
     private var cachedPageTabs: [Int: UIView] = [:]
