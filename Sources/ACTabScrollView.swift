@@ -16,39 +16,39 @@
 import UIKit
 
 @IBDesignable
-public class ACTabScrollView: UIView, UIScrollViewDelegate {
+open class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: Public Variables
-    @IBInspectable public var defaultPage: Int = 0
-    @IBInspectable public var tabSectionHeight: CGFloat = -1
-    @IBInspectable public var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable public var contentSectionBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable public var tabGradient: Bool = true
-    @IBInspectable public var arrowIndicator: Bool = false
-    @IBInspectable public var pagingEnabled: Bool = true {
+    @IBInspectable open var defaultPage: Int = 0
+    @IBInspectable open var tabSectionHeight: CGFloat = -1
+    @IBInspectable open var tabSectionBackgroundColor: UIColor = UIColor.white
+    @IBInspectable open var contentSectionBackgroundColor: UIColor = UIColor.white
+    @IBInspectable open var tabGradient: Bool = true
+    @IBInspectable open var arrowIndicator: Bool = false
+    @IBInspectable open var pagingEnabled: Bool = true {
         didSet {
-            contentSectionScrollView.pagingEnabled = pagingEnabled
+            contentSectionScrollView.isPagingEnabled = pagingEnabled
         }
     }
-    @IBInspectable public var cachedPageLimit: Int = 3
+    @IBInspectable open var cachedPageLimit: Int = 3
     
-    public var delegate: ACTabScrollViewDelegate?
-    public var dataSource: ACTabScrollViewDataSource?
-    public var scrollingDisabled: Bool = false {
+    open var delegate: ACTabScrollViewDelegate?
+    open var dataSource: ACTabScrollViewDataSource?
+    open var scrollingDisabled: Bool = false {
         didSet {
-            tabSectionScrollView.scrollEnabled = !scrollingDisabled
-            contentSectionScrollView.scrollEnabled = !scrollingDisabled
+            tabSectionScrollView.isScrollEnabled = !scrollingDisabled
+            contentSectionScrollView.isScrollEnabled = !scrollingDisabled
         }
     }
     
     // MARK: Private Variables
-    public var tabSectionScrollView: UIScrollView!
-    public var contentSectionScrollView: UIScrollView!
-    private var arrowView: ArrowView!
+    open var tabSectionScrollView: UIScrollView!
+    open var contentSectionScrollView: UIScrollView!
+    fileprivate var arrowView: ArrowView!
     
-    private var cachedPageTabs: [Int: UIView] = [:]
-    private var cachedPageContents: CacheQueue<Int, UIView> = CacheQueue()
-    private var realcachedPageLimit: Int {
+    fileprivate var cachedPageTabs: [Int: UIView] = [:]
+    fileprivate var cachedPageContents: CacheQueue<Int, UIView> = CacheQueue()
+    fileprivate var realcachedPageLimit: Int {
         var limit = 3
         if (cachedPageLimit > 3) {
             limit = cachedPageLimit
@@ -58,28 +58,28 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         return limit
     }
     
-    private var isStarted = false
-    private var pageIndex: Int!
-    private var prevPageIndex: Int?
+    fileprivate var isStarted = false
+    fileprivate var pageIndex: Int!
+    fileprivate var prevPageIndex: Int?
     
-    private var isWaitingForPageChangedCallback = false
-    private var pageChangedCallback: (Void -> Void)?
+    fileprivate var isWaitingForPageChangedCallback = false
+    fileprivate var pageChangedCallback: ((Void) -> Void)?
     
     // MARK: DataSource
-    private var numberOfPages = 0
+    fileprivate var numberOfPages = 0
     
     @available(iOS 10.0, *)
     lazy var feedbackGenerator: UISelectionFeedbackGenerator = { return UISelectionFeedbackGenerator() }()
     
-    private func widthForTabAtIndex(index: Int) -> CGFloat {
+    fileprivate func widthForTabAtIndex(_ index: Int) -> CGFloat {
         return cachedPageTabs[index]?.frame.width ?? 0
     }
     
-    private func tabViewForPageAtIndex(index: Int) -> UIView? {
+    fileprivate func tabViewForPageAtIndex(_ index: Int) -> UIView? {
         return dataSource?.tabScrollView(self, tabViewForPageAtIndex: index)
     }
     
-    private func contentViewForPageAtIndex(index: Int) -> UIView? {
+    fileprivate func contentViewForPageAtIndex(_ index: Int) -> UIView? {
         return dataSource?.tabScrollView(self, contentViewForPageAtIndex: index)
     }
     
@@ -96,7 +96,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         initialize()
     }
     
-    private func initialize() {
+    fileprivate func initialize() {
         // init views
         tabSectionScrollView = UIScrollView()
         contentSectionScrollView = UIScrollView()
@@ -106,18 +106,18 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         self.addSubview(tabSectionScrollView)
         self.addSubview(arrowView)
         
-        tabSectionScrollView.pagingEnabled = false
+        tabSectionScrollView.isPagingEnabled = false
         tabSectionScrollView.showsHorizontalScrollIndicator = false
         tabSectionScrollView.showsVerticalScrollIndicator = false
         tabSectionScrollView.delegate = self
         
-        contentSectionScrollView.pagingEnabled = pagingEnabled
+        contentSectionScrollView.isPagingEnabled = pagingEnabled
         contentSectionScrollView.showsHorizontalScrollIndicator = false
         contentSectionScrollView.showsVerticalScrollIndicator = false
         contentSectionScrollView.delegate = self
     }
     
-    override public func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         
         // reset status and stop scrolling immediately
@@ -130,13 +130,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
         contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
         arrowView.arrorBackgroundColor = self.tabSectionBackgroundColor
-        arrowView.hidden = !arrowIndicator
+        arrowView.isHidden = !arrowIndicator
         
         // first time setup pages
         setupPages()
         
         // async necessarily
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             // first time set defaule pageIndex
             self.initWithPageIndex(self.pageIndex ?? self.defaultPage)
             self.isStarted = true
@@ -146,7 +146,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    override public func prepareForInterfaceBuilder() {
+    override open func prepareForInterfaceBuilder() {
         let textColor = UIColor(red: 203.0 / 255, green: 203.0 / 255, blue: 203.0 / 255, alpha: 1.0)
         let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : 64
         
@@ -156,27 +156,27 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         
         tabSectionLabel.text = "Tab Section"
         tabSectionLabel.textColor = textColor
-        tabSectionLabel.textAlignment = .Center
+        tabSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            tabSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+            tabSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
         } else {
-            tabSectionLabel.font = UIFont.systemFontOfSize(27)
+            tabSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
         tabSectionLabel.backgroundColor = tabSectionBackgroundColor
         contentSectionLabel.text = "Content Section"
         contentSectionLabel.textColor = textColor
-        contentSectionLabel.textAlignment = .Center
+        contentSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            contentSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+            contentSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
         } else {
-            contentSectionLabel.font = UIFont.systemFontOfSize(27)
+            contentSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
         contentSectionLabel.backgroundColor = contentSectionBackgroundColor
         
         // rect and seperator
         let rectView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         rectView.layer.borderWidth = 1
-        rectView.layer.borderColor = textColor.CGColor
+        rectView.layer.borderColor = textColor.cgColor
         
         let seperatorView = UIView(frame: CGRect(x: 0, y: tabSectionHeight, width: self.frame.width, height: 1))
         seperatorView.backgroundColor = textColor
@@ -193,14 +193,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // MARK: - Tab Clicking Control
-    func tabViewDidClick(sensor: UITapGestureRecognizer) {
+    func tabViewDidClick(_ sensor: UITapGestureRecognizer) {
         guard scrollingDisabled == false else { return }
         
         activedScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
-    func tabSectionScrollViewDidClick(sensor: UITapGestureRecognizer) {
+    func tabSectionScrollViewDidClick(_ sensor: UITapGestureRecognizer) {
         guard scrollingDisabled == false else { return }
         
         activedScrollView = tabSectionScrollView
@@ -208,10 +208,10 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // MARK: - Scrolling Control
-    private var activedScrollView: UIScrollView?
+    fileprivate var activedScrollView: UIScrollView?
     
     // scrolling animation begin by dragging
-    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    open func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         // tell the delegate we started scrolling
         delegate?.tabScrollViewDidStartScrolling(self)
         
@@ -226,13 +226,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // scrolling animation stop with decelerating
-    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         delegate?.tabScrollViewEndStartScrolling(self)
         moveToIndex(currentPageIndex(), animated: true)
     }
     
     // scrolling animation stop without decelerating
-    public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    open func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
             delegate?.tabScrollViewEndStartScrolling(self)
             moveToIndex(currentPageIndex(), animated: true)
@@ -240,7 +240,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // scrolling animation stop programmatically
-    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    open func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if (isWaitingForPageChangedCallback) {
             isWaitingForPageChangedCallback = false
             pageChangedCallback?()
@@ -248,7 +248,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // scrolling
-    public func scrollViewDidScroll(scrollView: UIScrollView) {
+    open func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentIndex = currentPageIndex()
         
         if (scrollView == activedScrollView) {
@@ -292,7 +292,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
 //    func scroll(offsetX: CGFloat) {
 //    }
     
-    public func reloadData() {
+    open func reloadData() {
         // setup pages
         setupPages()
         
@@ -300,24 +300,24 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         lazyLoadPages()
     }
     
-    public func changePageToIndex(index: Int, animated: Bool) {
+    open func changePageToIndex(_ index: Int, animated: Bool) {
         activedScrollView = tabSectionScrollView
         moveToIndex(index, animated: animated)
     }
     
-    public func changePageToIndex(index: Int, animated: Bool, completion: (Void -> Void)) {
+    open func changePageToIndex(_ index: Int, animated: Bool, completion: @escaping ((Void) -> Void)) {
         isWaitingForPageChangedCallback = true
         pageChangedCallback = completion
         changePageToIndex(index, animated: animated)
     }
     
     // MARK: Private Methods
-    private func stopScrolling() {
+    fileprivate func stopScrolling() {
         tabSectionScrollView.setContentOffset(tabSectionScrollView.contentOffset, animated: false)
         contentSectionScrollView.setContentOffset(contentSectionScrollView.contentOffset, animated: false)
     }
     
-    private func initWithPageIndex(index: Int) {
+    fileprivate func initWithPageIndex(_ index: Int) {
         // set pageIndex
         pageIndex = index
         prevPageIndex = pageIndex
@@ -337,7 +337,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func currentPageIndex() -> Int {
+    fileprivate func currentPageIndex() -> Int {
         let width = self.frame.width
         var currentPageIndex = Int((contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
         if (currentPageIndex < 0) {
@@ -348,7 +348,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         return currentPageIndex
     }
 
-    public var maxTabViewHeight: CGFloat {
+    open var maxTabViewHeight: CGFloat {
         var max: CGFloat = 0
         for i in 0 ..< numberOfPages {
             if let tabView = tabViewForPageAtIndex(i) {
@@ -360,7 +360,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         return max
     }
     
-    private func setupPages() {
+    fileprivate func setupPages() {
         // reset number of pages
         numberOfPages = dataSource?.numberOfPagesInTabScrollView(self) ?? 0
         
@@ -397,20 +397,20 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     // bind event
                     tabView.tag = i
-                    tabView.userInteractionEnabled = true
-                    tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
+                    tabView.isUserInteractionEnabled = true
+                    tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ACTabScrollView.tabViewDidClick(_:))))
                     tabSectionScrollView.addSubview(tabView)
                 }
                 tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
             }
             // reset the fixed size of tab section
-            let tabSectionFrameInsets = delegate?.tabSectionScrollViewFrameInset() ?? UIEdgeInsetsZero
+            let tabSectionFrameInsets = delegate?.tabSectionScrollViewFrameInset() ?? UIEdgeInsets.zero
             tabSectionScrollView.frame = CGRect(x: tabSectionFrameInsets.left,
                                                 y: 0,
                                                 width: self.frame.size.width - tabSectionFrameInsets.left - tabSectionFrameInsets.right,
                                                 height: tabSectionHeight)
             
-            tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
+            tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(ACTabScrollView.tabSectionScrollViewDidClick(_:))))
             tabSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: self.frame.width - widthForTabAtIndex(numberOfPages - 1))
             tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
             
@@ -426,7 +426,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func updateTabAppearance(animated animated: Bool = true) {
+    fileprivate func updateTabAppearance(animated: Bool = true) {
         if (tabGradient) {
             if (numberOfPages != 0) {
                 for i in 0 ..< numberOfPages {
@@ -443,7 +443,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     if let tab = self.cachedPageTabs[i] {
                         if (animated) {
-                            UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.AllowUserInteraction, animations: {
+                            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
                                 tab.alpha = alpha
                                 return
                             }, completion: nil)
@@ -456,7 +456,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func moveToIndex(index: Int, animated: Bool) {
+    fileprivate func moveToIndex(_ index: Int, animated: Bool) {
         if (index >= 0 && index < numberOfPages) {
             if (pagingEnabled) {
                 // force stop
@@ -478,7 +478,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func lazyLoadPages() {
+    fileprivate func lazyLoadPages() {
         if (numberOfPages != 0) {
             let offset = 1
             let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
@@ -509,7 +509,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func insertPageAtIndex(index: Int, frame: CGRect) {
+    fileprivate func insertPageAtIndex(_ index: Int, frame: CGRect) {
         if (cachedPageContents[index] == nil) {
             if let view = contentViewForPageAtIndex(index) {
                 view.frame = frame
@@ -537,8 +537,8 @@ public struct CacheQueue<Key: Hashable, Value> {
         }
         set {
             // key/value pair exists, delete it first
-            if let index = keys.indexOf(key) {
-                keys.removeAtIndex(index)
+            if let index = keys.index(of: key) {
+                keys.remove(at: index)
             }
             // append key
             if (newValue != nil) {
@@ -549,16 +549,16 @@ public struct CacheQueue<Key: Hashable, Value> {
         }
     }
     
-    mutating func awake(key: Key) {
-        if let index = keys.indexOf(key) {
-            keys.removeAtIndex(index)
+    mutating func awake(_ key: Key) {
+        if let index = keys.index(of: key) {
+            keys.remove(at: index)
             keys.append(key)
         }
     }
     
     mutating func popFirst() -> (Key, Value)? {
         let key = keys.removeFirst()
-        if let value = values.removeValueForKey(key) {
+        if let value = values.removeValue(forKey: key) {
             return (key, value)
         } else {
             return nil
@@ -580,33 +580,36 @@ class ArrowView : UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
     }
     
     var rect: CGRect!
     var arrorBackgroundColor: UIColor?
     
-    var midX: CGFloat { return CGRectGetMidX(rect) }
-    var midY: CGFloat { return CGRectGetMidY(rect) }
-    var maxX: CGFloat { return CGRectGetMaxX(rect) }
-    var maxY: CGFloat { return CGRectGetMaxY(rect) }
+    var midX: CGFloat { return rect.midX }
+    var midY: CGFloat { return rect.midY }
+    var maxX: CGFloat { return rect.maxX }
+    var maxY: CGFloat { return rect.maxY }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         self.rect = rect
         
         guard let ctx = UIGraphicsGetCurrentContext() else { return }
         
-        CGContextBeginPath(ctx)
-        CGContextMoveToPoint(ctx, 0, 0)
-        CGContextAddQuadCurveToPoint(ctx, maxX * 0.12, 0, maxX * 0.2, maxY * 0.2)
-        CGContextAddLineToPoint(ctx, midX - maxX * 0.05, maxY * 0.9)
-        CGContextAddQuadCurveToPoint(ctx, midX, maxY, midX + maxX * 0.05, maxY * 0.9)
-        CGContextAddLineToPoint(ctx, maxX * 0.8, maxY * 0.2)
-        CGContextAddQuadCurveToPoint(ctx, maxX * 0.88, 0, maxX, 0)
-        CGContextClosePath(ctx)
+        ctx.beginPath()
+        ctx.move(to: CGPoint(x: 0, y: 0))
+        ctx.addQuadCurve(to: CGPoint(x: maxX * 0.2, y: maxY * 0.2),
+                         control: CGPoint(x: maxX * 0.12, y: 0))
+        ctx.addLine(to: CGPoint(x: midX - maxX * 0.05, y: maxY * 0.9))
+        ctx.addQuadCurve(to: CGPoint(x: midX + maxX * 0.05, y: maxY * 0.9),
+                         control: CGPoint(x: midX, y: maxY))
+        ctx.addLine(to: CGPoint(x: maxX * 0.8, y: maxY * 0.2))
+        ctx.addQuadCurve(to: CGPoint(x: maxX, y: 0),
+                         control: CGPoint(x: maxX * 0.88, y: 0))
+        ctx.closePath()
         
-        CGContextSetFillColorWithColor(ctx, arrorBackgroundColor?.CGColor ?? UIColor.whiteColor().CGColor)
-        CGContextFillPath(ctx);
+        ctx.setFillColor(arrorBackgroundColor?.cgColor ?? UIColor.white.cgColor)
+        ctx.fillPath();
     }
     
 }
