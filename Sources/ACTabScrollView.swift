@@ -59,7 +59,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     private var isStarted = false
-    private var pageIndex: Int!
+    private var pageIndex = 0
     private var prevPageIndex: Int?
     
     private var isWaitingForPageChangedCallback = false
@@ -381,6 +381,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     cachedPageTabs[i] = tabView
                 }
             }
+
+            updateTabAppearance(animated: false)
             
             let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : maxTabViewHeight
             let contentSectionHeight = self.frame.size.height - tabSectionHeight
