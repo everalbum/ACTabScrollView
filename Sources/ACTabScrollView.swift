@@ -333,7 +333,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
             // set default position of tabs and contents
             tabSectionScrollView.contentOffset = CGPoint(x: 0, y: tabSectionScrollView.contentOffset.y)
             contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentSectionScrollView.contentOffset.y)
-            updateTabAppearance(animated: false)
+            updateTabAppearance(false)
         }
     }
     
@@ -426,7 +426,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    fileprivate func updateTabAppearance(animated: Bool = true) {
+    fileprivate func updateTabAppearance(_ animated: Bool = true) {
         if (tabGradient) {
             if (numberOfPages != 0) {
                 for i in 0 ..< numberOfPages {
