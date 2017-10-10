@@ -138,7 +138,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         // async necessarily
         DispatchQueue.main.async {
             // first time set defaule pageIndex
-            self.initWithPageIndex(self.pageIndex ?? self.defaultPage)
+            self.initWithPageIndex(self.pageIndex)
             self.isStarted = true
             
             // load pages
@@ -305,7 +305,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         moveToIndex(index, animated: animated)
     }
     
-    open func changePageToIndex(_ index: Int, animated: Bool, completion: @escaping ((Void) -> Void)) {
+    open func changePageToIndex(_ index: Int, animated: Bool, completion: @escaping (() -> Void)) {
         isWaitingForPageChangedCallback = true
         pageChangedCallback = completion
         changePageToIndex(index, animated: animated)
