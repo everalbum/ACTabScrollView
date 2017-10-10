@@ -63,7 +63,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     fileprivate var prevPageIndex: Int?
     
     fileprivate var isWaitingForPageChangedCallback = false
-    fileprivate var pageChangedCallback: ((Void) -> Void)?
+    fileprivate var pageChangedCallback: (() -> Void)?
     
     // MARK: DataSource
     fileprivate var numberOfPages = 0
