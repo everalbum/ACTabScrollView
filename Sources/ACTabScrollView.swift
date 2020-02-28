@@ -158,7 +158,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionLabel.textColor = textColor
         tabSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            tabSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
+            tabSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFont.Weight.heavy)
         } else {
             tabSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
@@ -167,7 +167,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionLabel.textColor = textColor
         contentSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            contentSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
+            contentSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFont.Weight.heavy)
         } else {
             contentSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
@@ -193,14 +193,14 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // MARK: - Tab Clicking Control
-    func tabViewDidClick(_ sensor: UITapGestureRecognizer) {
+    @objc func tabViewDidClick(_ sensor: UITapGestureRecognizer) {
         guard scrollingDisabled == false else { return }
         
         activedScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
-    func tabSectionScrollViewDidClick(_ sensor: UITapGestureRecognizer) {
+    @objc func tabSectionScrollViewDidClick(_ sensor: UITapGestureRecognizer) {
         guard scrollingDisabled == false else { return }
         
         activedScrollView = tabSectionScrollView
@@ -445,7 +445,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     if let tab = self.cachedPageTabs[i] {
                         if (animated) {
-                            UIView.animate(withDuration: 0.2, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                            UIView.animate(withDuration: 0.2, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
                                 tab.alpha = alpha
                                 return
                             }, completion: nil)
