@@ -187,9 +187,20 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
+<<<<<<< HEAD
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = AzureChen;
+				TargetAttributes = {
+=======
 				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = AzureChen;
 				TargetAttributes = {
+					6DB0CD1F1B8462B90069AE39 = {
+						CreatedOnToolsVersion = 6.4;
+						DevelopmentTeam = AFJ2WGE2QB;
+						LastSwiftMigration = 0800;
+					};
+>>>>>>> e7dbd22bb047c58753ff5a940552333f9b106b60
 					6DB0CD341B8462B90069AE39 = {
 						CreatedOnToolsVersion = 6.4;
 						LastSwiftMigration = 0910;
@@ -207,7 +218,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -329,7 +339,6 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -376,12 +385,48 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
+<<<<<<< HEAD
+=======
+		6DB0CD401B8462B90069AE39 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = AFJ2WGE2QB;
+				INFOPLIST_FILE = ACTabScrollView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
+				PRODUCT_NAME = ACTabScrollView;
+				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Debug;
+		};
+		6DB0CD411B8462B90069AE39 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = AFJ2WGE2QB;
+				INFOPLIST_FILE = ACTabScrollView/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
+				PRODUCT_NAME = ACTabScrollView;
+				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 4.0;
+			};
+			name = Release;
+		};
+>>>>>>> e7dbd22bb047c58753ff5a940552333f9b106b60
 		6DB0CD431B8462B90069AE39 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -443,7 +488,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -471,7 +516,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
